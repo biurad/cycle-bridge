@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class SpiralMigrateRollbackCommand extends AbstractCommand
+final class RollbackCommand extends AbstractCommand
 {
     protected static $defaultName = 'migrations:rollback';
 
