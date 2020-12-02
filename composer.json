@@ -1,6 +1,6 @@
 {
-    "name": "biurad/php-starter",
-    "description": "A PHP package template repository.",
+    "name": "biurad/cycle-bridge",
+    "description": "Well-integrated Cycle ORM for Nette and Biurad Framework.",
     "type": "library",
     "keywords": ["biurad","biuradphp","php7"],
     "homepage": "https://www.biurad.com",
@@ -16,30 +16,46 @@
         }
     ],
     "support": {
-        "docs": "https://docs.biurad.com/php-starter/",
-        "issues": "https://github.com/biurad/php-starter/issues",
-        "rss": "https://github.com/biurad/php-starter/releases.atom",
-        "source": "https://github.com/biurad/php-starter"
+        "docs": "https://docs.biurad.com/cycle-bridge/",
+        "issues": "https://github.com/biurad/cycle-bridge/issues",
+        "rss": "https://github.com/biurad/cycle-bridge/releases.atom",
+        "source": "https://github.com/biurad/cycle-bridge"
     },
     "require": {
-        "php": "^7.1 || ^8.0"
+        "php": "^7.1 || ^8.0",
+        "biurad/dependency-injection": "1.x-dev",
+        "cycle/orm": "^1.2",
+        "psr/log": "^1.1"
     },
     "require-dev": {
-        "composer/package-versions-deprecated": "^1.8",
+        "composer/package-versions-deprecated": "^1.11",
+        "cycle/annotated": "^2.0",
+        "cycle/migrations": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^8.5 || ^9.0",
+        "phpunit/phpunit": "^8.5 || ^9.4",
+        "spiral/migrations": "^2.1",
         "squizlabs/php_codesniffer": "^3.5",
         "vimeo/psalm": "^3.11 || ^4.0"
     },
+    "suggest": {
+        "cycle/annotated": "To add Doctrine annotations support to Cycle ORM",
+        "cycle/migrations": "For Automated migrations on commands using Cycle ORM",
+        "spiral/migrations": "A Database migrations, migration scaffolding for Spiral Database"
+    },
     "autoload": {
         "psr-4": {
-            "Biurad\\Package\\": "src/"
+            "Biurad\\Cycle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Biurad\\Package\\Tests\\": "tests/"
+            "Biurad\\Cycle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
         }
     },
     "scripts": {
