@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class SyncCommand extends AbstractCommand
 {
-    protected static $defaultName = 'spiral:migrate:sync';
+    protected static $defaultName = 'migrations:sync';
 
     /** @var Registry */
     private $registry;
