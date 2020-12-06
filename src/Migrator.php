@@ -20,6 +20,7 @@ namespace Biurad\Cycle;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Spiral\Database\Database as SpiralDatabase;
 use Spiral\Database\Table;
 use Spiral\Migrations\Capsule;
 use Spiral\Migrations\CapsuleInterface;
@@ -280,7 +281,7 @@ final class Migrator
         return $this->dbal->database($database)->table($this->config->getTable());
     }
 
-    protected function checkMigrationTableStructure(Database $db): bool
+    protected function checkMigrationTableStructure(SpiralDatabase $db): bool
     {
         $table = $db->table($this->config->getTable());
 
