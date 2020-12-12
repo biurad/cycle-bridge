@@ -17,11 +17,10 @@ declare(strict_types=1);
 
 namespace Biurad\Cycle\Commands\Migrations;
 
+use Biurad\Cycle\Compiler;
 use Biurad\Cycle\Generators\ShowChanges;
 use Biurad\Cycle\Migrator;
-use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator\SyncTables;
-use Cycle\Schema\GeneratorInterface;
 use Cycle\Schema\Registry;
 use Spiral\Migrations\Config\MigrationConfig;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,13 +33,13 @@ final class SyncCommand extends AbstractCommand
     /** @var Registry */
     private $registry;
 
-    /** @var GeneratorInterface[] */
-    private $generators;
+    /** @var Compiler */
+    private $compiler;
 
-    public function __construct(Migrator $migrator, MigrationConfig $config, Registry $registry, array $generators)
+    public function __construct(Migrator $migrator, MigrationConfig $config, Registry $registry, Compiler $compiler)
     {
-        $this->registry   = $registry;
-        $this->generators = $generators;
+        $this->compiler = $compiler;
+        $this->registry = $registry;
 
         parent::__construct($migrator, $config);
     }
@@ -62,8 +61,9 @@ final class SyncCommand extends AbstractCommand
             return 1;
         }
 
-        $show = new ShowChanges($output);
-        (new Compiler())->compile($this->registry, \array_merge($this->generators, [$show, new SyncTables()]));
+        $this->compiler->addGenerator($show = new ShowChanges($output));
+        $this->compiler->addGenerator(new SyncTables());
+        $this->compiler->compile($this->registry);
 
         if ($show->hasChanges()) {
             $output->writeln("\n<info>ORM Schema has been synchronized</info>");

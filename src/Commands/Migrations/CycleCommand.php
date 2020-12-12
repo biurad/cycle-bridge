@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace Biurad\Cycle\Commands\Migrations;
 
+use Biurad\Cycle\Compiler;
 use Biurad\Cycle\Generators\ShowChanges;
 use Biurad\Cycle\Migrator;
 use Cycle\Migrations\GenerateMigrations;
-use Cycle\Schema\Compiler;
 use Cycle\Schema\Registry;
 use Spiral\Migrations\Config\MigrationConfig;
 use Spiral\Migrations\State;
@@ -35,17 +35,13 @@ final class CycleCommand extends AbstractCommand
     /** @var Registry */
     private $registry;
 
-    /** @var GenerateMigrations */
-    private $migrations;
+    /** @var Compiler */
+    private $compiler;
 
-    /** @var GeneratorInterface[] */
-    private $generators;
-
-    public function __construct(Migrator $migrator, MigrationConfig $config, Registry $registry, GenerateMigrations $migrations, array $generators)
+    public function __construct(Migrator $migrator, MigrationConfig $config, Registry $registry, Compiler $compiler)
     {
-        $this->registry   = $registry;
-        $this->migrations = $migrations;
-        $this->generators = $generators;
+        $this->compiler = $compiler;
+        $this->registry = $registry;
 
         parent::__construct($migrator, $config);
     }
@@ -83,11 +79,12 @@ final class CycleCommand extends AbstractCommand
             }
         }
 
-        $show = new ShowChanges($output);
-        (new Compiler())->compile($this->registry, \array_merge($this->generators, [$show]));
+        $this->compiler->addGenerator($show = new ShowChanges($output));
+        $this->compiler->compile($this->registry);
 
         if ($show->hasChanges()) {
-            (new Compiler())->compile($this->registry, [$this->migrations]);
+            $this->compiler->addGenerator(new GenerateMigrations($this->migrator->getRepository(), $this->config));
+            $this->compiler->compile($this->registry);
 
             if ($input->getOption('run')) {
                 return $this->getApplication()->find('migrations:start')
