@@ -73,7 +73,7 @@ final class CycleCommand extends AbstractCommand
 
         foreach ($this->migrator->getMigrations() as $migration) {
             if ($migration->getState()->getStatus() !== State::STATUS_EXECUTED) {
-                $output->writeln('<fg=red>Outstanding migrations found, run `migrate` first.</fg=red>');
+                $output->writeln('<fg=red>Outstanding migrations found, run `migrations:start` first.</fg=red>');
 
                 return 1;
             }
@@ -83,8 +83,7 @@ final class CycleCommand extends AbstractCommand
         $this->compiler->compile($this->registry);
 
         if ($show->hasChanges()) {
-            $this->compiler->addGenerator(new GenerateMigrations($this->migrator->getRepository(), $this->config));
-            $this->compiler->compile($this->registry);
+            (new GenerateMigrations($this->migrator->getRepository(), $this->config))->run($this->registry);
 
             if ($input->getOption('run')) {
                 return $this->getApplication()->find('migrations:start')
