@@ -96,7 +96,7 @@ abstract class AbstractCommand extends Command
         if (!$this->migrator->isConfigured()) {
             $output->writeln('');
             $output->writeln(
-                "<fg=red>Migrations are not configured yet, run '<info>migrate:init</info>' first.</fg=red>"
+                "<fg=red>Migrations are not configured yet, run '<info>migrations:init</info>' first.</fg=red>"
             );
 
             return false;
