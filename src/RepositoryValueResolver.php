@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Biurad\Cycle;
 
+use Biurad\Http\ServerRequest;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Schema;
 use Cycle\ORM\Select;
@@ -45,9 +46,10 @@ class RepositoryValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(ReflectionParameter $parameter, array $providedParameters)
     {
-        $parameterClass = $parameter->getClass();
+        $parameterType = $parameter->getType();
 
-        if (!$parameterClass instanceof ReflectionClass) {
+        if (!$parameterType instanceof \ReflectionNamedType || $parameterType->isBuiltin()) {
+            // No type, Primitive types and Union types are not supported
             return;
         }
 
@@ -58,7 +60,7 @@ class RepositoryValueResolver implements ArgumentValueResolverInterface
 
             if (
                 $repository !== Select\Repository::class
-                && $repository === $parameterClass->getName()
+                && $repository === $parameterType->getName()
             ) {
                 return $this->orm->getRepository($role);
             }
