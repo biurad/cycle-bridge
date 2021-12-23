@@ -30,7 +30,7 @@
     "require-dev": {
         "composer/package-versions-deprecated": "^1.11",
         "cycle/annotated": "^2.0",
-        "cycle/migrations": "^1.0",
+        "cycle/migrations": "^1.0 || ^3.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpunit/phpunit": "^8.5 || ^9.4",
